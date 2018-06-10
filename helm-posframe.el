@@ -96,6 +96,8 @@ When nil, Using current frame's font as fallback."
 (defvar emacs-basic-display)
 
 (defun helm-posframe-display (buffer &optional _resume)
+  "The display function which is used by `helm-display-function'.
+Argument BUFFER."
   (setq helm-posframe-buffer buffer)
   (posframe-show
    buffer
