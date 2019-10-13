@@ -34,9 +34,10 @@
 
 ;; NOTE: helm-posframe requires Emacs 26
 
-;; ** How to enable helm-posframe
+;; ** How to enable and disable helm-posframe
 ;;    #+BEGIN_EXAMPLE
 ;;    (helm-posframe-enable)
+;;    (helm-posframe-disable)
 ;;    #+END_EXAMPLE
 
 ;; ** Tips
@@ -131,6 +132,14 @@ Argument BUFFER."
   (setq helm-display-function #'helm-posframe-display)
   (add-hook 'helm-cleanup-hook #'helm-posframe-cleanup)
   (message "helm-posframe is enabled."))
+
+(defun helm-posframe-disable ()
+  "Disable helm-posframe"
+  (interactive)
+  (require 'helm)
+  (setq helm-display-function #'helm-default-display-buffer)
+  (remove-hook 'helm-cleanup-hook #'helm-posframe-cleanup)
+  (message "helm-posframe is disabled."))
 
 (provide 'helm-posframe)
 
