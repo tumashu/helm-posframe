@@ -114,15 +114,8 @@ Argument BUFFER."
 
 (defun helm-posframe-cleanup ()
   "Cleanup helm-posframe."
-  (when (helm-posframe-workable-p)
+  (when (posframe-workable-p)
     (posframe-hide helm-posframe-buffer)))
-
-(defun helm-posframe-workable-p ()
-  "Test helm-posframe workable status."
-  (and (>= emacs-major-version 26)
-       (not (or noninteractive
-                emacs-basic-display
-                (not (display-graphic-p))))))
 
 ;;;###autoload
 (defun helm-posframe-enable ()
