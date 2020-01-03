@@ -112,10 +112,18 @@ Argument BUFFER."
    :override-parameters helm-posframe-parameters
    :respect-header-line t))
 
-(defun helm-posframe-cleanup ()
-  "Cleanup helm-posframe."
-  (when (posframe-workable-p)
-    (posframe-hide helm-posframe-buffer)))
+(defun helm-posframe-cleanup (orig-func)
+  "Advice function of `helm-cleanup'.
+
+`helm-cleanup' will call `bury-buffer' function, which
+will let emacs minimize and restore when helm close.
+
+In this advice function, `burn-buffer' will be temp redefine as
+`ignore', do nothing."
+  (cl-letf (((symbol-function 'bury-buffer) #'ignore))
+    (funcall orig-func)
+    (when (posframe-workable-p)
+      (posframe-hide helm-posframe-buffer))))
 
 ;;;###autoload
 (defun helm-posframe-enable ()
@@ -123,7 +131,7 @@ Argument BUFFER."
   (interactive)
   (require 'helm)
   (setq helm-display-function #'helm-posframe-display)
-  (add-hook 'helm-cleanup-hook #'helm-posframe-cleanup)
+  (advice-add 'helm-cleanup :around #'helm-posframe-helm-cleanup)
   (message "helm-posframe is enabled."))
 
 (defun helm-posframe-disable ()
@@ -131,7 +139,7 @@ Argument BUFFER."
   (interactive)
   (require 'helm)
   (setq helm-display-function #'helm-default-display-buffer)
-  (remove-hook 'helm-cleanup-hook #'helm-posframe-cleanup)
+  (advice-remove 'helm-cleanup  #'helm-posframe-helm-cleanup)
   (message "helm-posframe is disabled."))
 
 (provide 'helm-posframe)
