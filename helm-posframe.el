@@ -131,7 +131,7 @@ In this advice function, `burn-buffer' will be temp redefine as
   (interactive)
   (require 'helm)
   (setq helm-display-function #'helm-posframe-display)
-  (advice-add 'helm-cleanup :around #'helm-posframe-helm-cleanup)
+  (advice-add 'helm-cleanup :around #'helm-posframe-cleanup)
   (message "helm-posframe is enabled."))
 
 (defun helm-posframe-disable ()
@@ -139,7 +139,7 @@ In this advice function, `burn-buffer' will be temp redefine as
   (interactive)
   (require 'helm)
   (setq helm-display-function #'helm-default-display-buffer)
-  (advice-remove 'helm-cleanup  #'helm-posframe-helm-cleanup)
+  (advice-remove 'helm-cleanup  #'helm-posframe-cleanup)
   (message "helm-posframe is disabled."))
 
 (provide 'helm-posframe)
