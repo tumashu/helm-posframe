@@ -79,6 +79,21 @@
   :group 'helm-posframe
   :type 'number)
 
+(defcustom helm-posframe-min-width nil
+  "The width of helm-min-posframe."
+  :group 'helm-posframe
+  :type 'number)
+
+(defcustom helm-posframe-min-height nil
+  "The height of helm-min-posframe."
+  :group 'helm-posframe
+  :type 'number)
+
+(defcustom helm-posframe-size-function #'helm-posframe-get-size
+  "The function which is used to deal with posframe's size."
+  :group 'helm-posframe
+  :type 'function)
+
 (defcustom helm-posframe-font nil
   "The font used by helm-posframe.
 When nil, Using current frame's font as fallback."
@@ -100,17 +115,26 @@ When nil, Using current frame's font as fallback."
   "The display function which is used by `helm-display-function'.
 Argument BUFFER."
   (setq helm-posframe-buffer buffer)
-  (posframe-show
-   buffer
-   :position (point)
-   :poshandler helm-posframe-poshandler
+  (apply #'posframe-show
+         buffer
+         :position (point)
+         :poshandler helm-posframe-poshandler
+         :font helm-posframe-font
+         :override-parameters helm-posframe-parameters
+         :respect-header-line t
+         (funcall helm-posframe-size-function)))
+
+(defun helm-posframe-get-size ()
+  "The default functon used by `helm-posframe-size-function'."
+  (list
    :width (or helm-posframe-width (+ (window-width) 2))
    :height (or helm-posframe-height helm-display-buffer-height)
-   :min-height 10
-   :min-width 50
-   :font helm-posframe-font
-   :override-parameters helm-posframe-parameters
-   :respect-header-line t))
+   :min-height (or helm-posframe-min-height
+                   (let ((height (+ helm-display-buffer-height 1)))
+                     (min height (or helm-posframe-height height))))
+   :min-width (or helm-posframe-min-width
+                  (let ((width (round (* (frame-width) 0.62))))
+                    (min width (or helm-posframe-width width))))))
 
 (defun helm-posframe-cleanup (orig-func)
   "Advice function of `helm-cleanup'.
