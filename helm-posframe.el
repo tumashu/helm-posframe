@@ -100,6 +100,12 @@ When nil, Using current frame's font as fallback."
   :group 'helm-posframe
   :type 'string)
 
+(defcustom helm-posframe-border-width 1
+  "The border width used by helm-posframe.
+When 0, no border is shown."
+  :group 'helm-posframe
+  :type 'number)
+
 (defcustom helm-posframe-parameters nil
   "The frame parameters used by helm-posframe."
   :group 'helm-posframe
@@ -121,6 +127,7 @@ Argument BUFFER."
          :poshandler helm-posframe-poshandler
          :font helm-posframe-font
          :override-parameters helm-posframe-parameters
+	 :internal-border-width helm-posframe-border-width
          :respect-header-line t
          (funcall helm-posframe-size-function)))
 
