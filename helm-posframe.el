@@ -169,7 +169,7 @@ In this advice function, `burn-buffer' will be temp redefine as
 (provide 'helm-posframe)
 
 ;; Local Variables:
-;; coding: utf-8-unix
+;; coding: utf-8
 ;; End:
 
 ;;; helm-posframe.el ends here
