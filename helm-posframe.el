@@ -164,7 +164,7 @@ will let emacs minimize and restore when helm close.
 In this advice function, `burn-buffer' will be temp redefine as
 `ignore', do nothing."
   (cl-letf (((symbol-function 'bury-buffer) #'ignore)
-            ((symbol-function 'replace-buffer-in-windows)) #'ignore)
+            ((symbol-function 'replace-buffer-in-windows) #'ignore))
     (funcall orig-func)
     (when (posframe-workable-p)
       (posframe-hide helm-posframe-buffer))))
