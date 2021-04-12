@@ -64,7 +64,7 @@
   :prefix "helm-posframe")
 
 (defcustom helm-posframe-poshandler
-  #'posframe-poshandler-frame-bottom-left-corner
+  #'posframe-poshandler-frame-center
   "The poshandler of helm-posframe."
   :group 'helm-posframe
   :type 'function)
