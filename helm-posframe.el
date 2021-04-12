@@ -7,7 +7,7 @@
 ;; URL: https://github.com/tumashu/helm-posframe
 ;; Version: 0.1.0
 ;; Keywords: abbrev, convenience, matching, helm
-;; Package-Requires: ((emacs "26.0")(posframe "0.1.0")(helm "0.1"))
+;; Package-Requires: ((emacs "26.0")(posframe "1.0.0")(helm "0.1"))
 
 ;; This file is part of GNU Emacs.
 
@@ -89,6 +89,11 @@
   :group 'helm-posframe
   :type 'number)
 
+(defcustom helm-posframe-border-width 3
+  "The border width used by helm-posframe.
+When 0, no border is showed."
+  :type 'number)
+
 (defcustom helm-posframe-size-function #'helm-posframe-get-size
   "The function which is used to deal with posframe's size."
   :group 'helm-posframe
@@ -111,6 +116,11 @@ When 0, no border is shown."
   :group 'helm-posframe
   :type 'string)
 
+(defface helm-posframe-border
+  '((t (:inherit default :background "gray50")))
+  "Face used by the ivy-posframe's border."
+  :group 'helm-posframe)
+
 (defvar helm-posframe-buffer nil
   "The posframe-buffer used by helm-posframe.")
 
@@ -129,6 +139,8 @@ Argument BUFFER."
          :override-parameters helm-posframe-parameters
 	 :internal-border-width helm-posframe-border-width
          :respect-header-line t
+         :border-width helm-posframe-border-width
+         :border-color (face-attribute 'helm-posframe-border :background nil t)
          (funcall helm-posframe-size-function)))
 
 (defun helm-posframe-get-size ()
@@ -151,7 +163,8 @@ will let emacs minimize and restore when helm close.
 
 In this advice function, `burn-buffer' will be temp redefine as
 `ignore', do nothing."
-  (cl-letf (((symbol-function 'bury-buffer) #'ignore))
+  (cl-letf (((symbol-function 'bury-buffer) #'ignore)
+            ((symbol-function 'replace-buffer-in-windows)) #'ignore)
     (funcall orig-func)
     (when (posframe-workable-p)
       (posframe-hide helm-posframe-buffer))))
