@@ -92,11 +92,6 @@
   :group 'helm-posframe
   :type 'number)
 
-(defcustom helm-posframe-border-width 3
-  "The border width used by helm-posframe.
-When 0, no border is showed."
-  :type 'number)
-
 (defcustom helm-posframe-size-function #'helm-posframe-get-size
   "The function which is used to deal with posframe's size."
   :group 'helm-posframe
