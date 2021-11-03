@@ -140,7 +140,6 @@ Argument BUFFER."
          :poshandler helm-posframe-poshandler
          :font helm-posframe-font
          :override-parameters helm-posframe-parameters
-	 :internal-border-width helm-posframe-border-width
          :respect-header-line t
          :border-width helm-posframe-border-width
          :border-color (face-attribute 'helm-posframe-border :background nil t)
