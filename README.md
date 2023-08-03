@@ -20,10 +20,11 @@ Note: this file is auto converted from helm-posframe.el by [el2org](https://gith
 
 ## New maintainer!!!
 
- - Hey everyone! My name is OJ, and I am the new maintainer for helm-posframe!! I am here to help however you need, as best we can, as quick as I can! OJMac789@github.com or <ojandjess1@gmail.com>.
- - Please post your issues or pull requests and I will review asap. Also, feel free to email me!
+Hey everyone! My name is OJ, and I am the new maintainer for helm-posframe!! I am here to help however you need, as best we can, as quick as I can! OJMac789@github.com or <ojandjess1@gmail.com>.
+
+Please post your issues or pull requests and I will review asap. Also, feel free to email me!
    
-   Cheers, OJ
+Cheers, OJ
 
 <a id="org1386f89"></a>
 
