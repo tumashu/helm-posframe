@@ -97,6 +97,12 @@
   :group 'helm-posframe
   :type 'function)
 
+(defcustom helm-posframe-refposhandler #'helm-posframe-refposhandler-default
+  "The refposhandler used by helm-posframe.
+
+NOTE: This variable is very useful to EXWM users."
+  :type 'function)
+
 (defcustom helm-posframe-font nil
   "The font used by helm-posframe.
 When nil, Using current frame's font as fallback."
@@ -124,6 +130,8 @@ When 0, no border is shown."
 
 ;; Fix warn
 (defvar emacs-basic-display)
+(defvar exwm-workspace--workareas)
+(defvar exwm-workspace-current-index)
 
 (defun helm-posframe-display (buffer &optional _resume)
   "The display function which is used by `helm-display-function'.
@@ -168,6 +176,31 @@ In this advice function, `burn-buffer' will be temp redefine as
     (funcall orig-func)
     (when (posframe-workable-p)
       (posframe-hide helm-posframe-buffer))))
+
+(defun helm-posframe-refposhandler-default (&optional frame)
+  "The default posframe refposhandler used by vertico-posframe.
+Optional argument FRAME ."
+  (cond
+   ;; EXWM environment
+   ((bound-and-true-p exwm--connection)
+    (or (ignore-errors
+          (let ((info (elt exwm-workspace--workareas
+                           exwm-workspace-current-index)))
+            (cons (elt info 0)
+                  (elt info 1))))
+        ;; Need user install xwininfo.
+        (ignore-errors
+          (posframe-refposhandler-xwininfo frame))
+        ;; Fallback, this value will incorrect sometime, for example: user
+        ;; have panel.
+        (cons 0 0)))
+   (t nil)))
+
+(defun helm-posframe--focus-minibuffer (_actions)
+  "Advice function of `helm-show-action-buffer'.
+
+This function will focus minibuffer when helm action buffer is shown."
+  (select-window (minibuffer-window)))
 
 ;;;###autoload
 (defun helm-posframe-enable ()
