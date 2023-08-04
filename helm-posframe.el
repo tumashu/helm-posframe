@@ -135,10 +135,13 @@ Argument BUFFER."
          :poshandler helm-posframe-poshandler
          :font helm-posframe-font
          :override-parameters helm-posframe-parameters
+         :refposhandler helm-posframe-refposhandler
          :respect-header-line t
          :border-width helm-posframe-border-width
          :border-color (face-attribute 'helm-posframe-border :background nil t)
-         (funcall helm-posframe-size-function)))
+         (funcall helm-posframe-size-function))
+  (with-selected-frame (with-helm-window (selected-frame))
+    (set-window-dedicated-p (get-buffer-window helm-buffer) nil)))
 
 (defun helm-posframe-get-size ()
   "The default functon used by `helm-posframe-size-function'."
@@ -172,7 +175,8 @@ In this advice function, `burn-buffer' will be temp redefine as
   (interactive)
   (require 'helm)
   (setq helm-display-function #'helm-posframe-display)
-  (advice-add 'helm-cleanup :around #'helm-posframe-cleanup)
+  (advice-add #'helm-cleanup :around #'helm-posframe-cleanup)
+  (advice-add #'helm-show-action-buffer :after #'helm-posframe--focus-minibuffer)
   (message "helm-posframe is enabled."))
 
 (defun helm-posframe-disable ()
@@ -180,7 +184,8 @@ In this advice function, `burn-buffer' will be temp redefine as
   (interactive)
   (require 'helm)
   (setq helm-display-function #'helm-default-display-buffer)
-  (advice-remove 'helm-cleanup  #'helm-posframe-cleanup)
+  (advice-remove #'helm-cleanup  #'helm-posframe-cleanup)
+  (advice-remove #'helm-show-action-buffer #'helm-posframe--focus-minibuffer)
   (message "helm-posframe is disabled."))
 
 (provide 'helm-posframe)
