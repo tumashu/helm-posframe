@@ -210,6 +210,7 @@ This function will focus minibuffer when helm action buffer is shown."
   (setq helm-display-function #'helm-posframe-display)
   (advice-add #'helm-cleanup :around #'helm-posframe-cleanup)
   (advice-add #'helm-show-action-buffer :after #'helm-posframe--focus-minibuffer)
+  (advice-add #'helm-display-mode-line :override #'ignore)
   (message "helm-posframe is enabled."))
 
 (defun helm-posframe-disable ()
@@ -217,8 +218,9 @@ This function will focus minibuffer when helm action buffer is shown."
   (interactive)
   (require 'helm)
   (setq helm-display-function #'helm-default-display-buffer)
-  (advice-remove #'helm-cleanup  #'helm-posframe-cleanup)
+  (advice-remove #'helm-cleanup #'helm-posframe-cleanup)
   (advice-remove #'helm-show-action-buffer #'helm-posframe--focus-minibuffer)
+  (advice-remove #'helm-display-mode-line #'ignore)
   (message "helm-posframe is disabled."))
 
 (provide 'helm-posframe)
